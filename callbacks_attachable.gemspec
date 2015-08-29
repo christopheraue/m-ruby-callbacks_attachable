@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Christopher Aue"]
   spec.email         = ["mail@christopheraue.net"]
 
-  spec.summary       = %q{Attach callbacks to ruby objects. Then, Trigger and detach them.}
+  spec.summary       = %q{Attach callbacks to ruby objects. Then, trigger and detach them.}
   spec.homepage      = "https://github.com/christopheraue/ruby-callbacks_attachable"
   spec.license       = "MIT"
 

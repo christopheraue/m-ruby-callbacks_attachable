@@ -26,7 +26,7 @@ Or install it yourself as:
 require 'callbacks_attachable'
 
 class CallbacksHolder
-    include CallbackAttachable
+    include CallbacksAttachable
 end
 ```
 
@@ -57,7 +57,8 @@ Callbacks can be executed in the context of a different context by passing the
 
 ```ruby
 object = Object.new
-CallbacksHolder.trigger(:event, :__id__, context: object) # => puts the result of object.__id__
+CallbacksHolder.trigger(:event, :__id__, context: object)
+# => puts the result of object.__id__
 ```
 
 To detach a callback call `.off` with the event namespace and the callback
