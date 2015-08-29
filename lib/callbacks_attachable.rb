@@ -14,16 +14,16 @@ module CallbacksAttachable
 
     def once_on(event, &callback)
       klass = self
-      callback = on(event) do |*args|
-        klass.off(event, callback)
+      registered_callback = on(event) do |*args|
+        klass.off(event, registered_callback)
         instance_exec(*args, &callback)
       end
     end
 
     def until_true_on(event, &callback)
       klass = self
-      callback = on(event) do |*args|
-        klass.off(event, callback) if instance_exec(*args, &callback)
+      registered_callback = on(event) do |*args|
+        klass.off(event, registered_callback) if instance_exec(*args, &callback)
       end
     end
 
