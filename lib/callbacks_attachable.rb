@@ -6,23 +6,27 @@ module CallbacksAttachable
   end
 
   module ClassMethods
-    def on(event, &callback)
+    def on(event, skip: 0, &callback)
+      count = 0
       callbacks[event] ||= []
-      callbacks[event] << callback
-      callback
+      callbacks[event] << proc do |*args|
+        next unless (count += 1) > skip
+        instance_exec(*args, &callback)
+      end
+      callbacks[event].last
     end
 
-    def once_on(event, &callback)
+    def once_on(event, *opts, &callback)
       klass = self
-      registered_callback = on(event) do |*args|
+      registered_callback = on(event, *opts) do |*args|
         klass.off(event, registered_callback)
         instance_exec(*args, &callback)
       end
     end
 
-    def until_true_on(event, &callback)
+    def until_true_on(event, *opts, &callback)
       klass = self
-      registered_callback = on(event) do |*args|
+      registered_callback = on(event, *opts) do |*args|
         klass.off(event, registered_callback) if instance_exec(*args, &callback)
       end
     end
@@ -52,34 +56,34 @@ module CallbacksAttachable
     end
   end
 
-  def on(event, &block)
-    if_self(:on, event, &block)
+  def on(*args, &block)
+    if_self(:on, *args, &block)
   end
 
-  def once_on(event, &block)
-    if_self(:until_true_on, event) do |*args|
+  def once_on(*args, &block)
+    if_self(:until_true_on, *args) do |*args|
       block.call(*args)
       true
     end
   end
 
-  def until_true_on(event, &block)
-    if_self(:until_true_on, event, &block)
+  def until_true_on(*args, &block)
+    if_self(:until_true_on, *args, &block)
   end
 
   def trigger(event, *args)
     self.class.trigger(event, *args, context: self)
   end
 
-  def off(event, callback)
-    self.class.off(event, callback)
+  def off(*args)
+    self.class.off(*args)
   end
 
   private
 
-  def if_self(method, event, &block)
+  def if_self(*args, &block)
     instance = self
-    self.class.__send__(method, event) do |*args|
+    self.class.__send__(*args) do |*args|
       next false if instance != self
       block.call(*args)
     end
