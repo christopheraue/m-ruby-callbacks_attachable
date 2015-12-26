@@ -86,7 +86,7 @@ module CallbacksAttachable
   def if_self(*args, &block)
     instance = self
     self.class.__send__(*args) do |*args|
-      next false if instance != self
+      next if instance != self
       block.call(*args)
     end
   end
