@@ -27,7 +27,9 @@ module CallbacksAttachable
     def until_true_on(event, *opts, &callback)
       klass = self
       registered_callback = on(event, *opts) do |*args|
-        klass.off(event, registered_callback) if instance_exec(*args, &callback)
+        instance_exec(*args, &callback).tap do |result|
+          klass.off(event, registered_callback) if result
+        end
       end
     end
 
@@ -36,9 +38,9 @@ module CallbacksAttachable
 
       # dup the callback list so that removing callbacks while iterating does
       # still call all callbacks during map.
-      callbacks[event].dup.map do |callback|
+      callbacks[event].dup.all? do |callback|
         context.instance_exec(*args, &callback) != false
-      end.all?
+      end
     end
 
     def off(event, callback)
