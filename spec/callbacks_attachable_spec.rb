@@ -226,6 +226,13 @@ describe CallbacksAttachable do
             it { is_expected.to be true }
           end
         end
+
+        context "when there is another instance triggering the same event" do
+          let(:instance2) { klass.new }
+          before { instance2.trigger(:event, :arg) }
+          it { is_expected.not_to send_message(:method).to(instance) }
+          it { is_expected.to be true }
+        end
       end
     end
 
@@ -260,6 +267,13 @@ describe CallbacksAttachable do
             it { is_expected.to be true }
           end
         end
+
+        context "when there is another instance triggering the same event" do
+          let(:instance2) { klass.new }
+          before { instance2.trigger(:event, :arg) }
+          it { is_expected.not_to send_message(:method).to(instance) }
+          it { is_expected.to be true }
+        end
       end
     end
 
@@ -285,7 +299,7 @@ describe CallbacksAttachable do
       end
 
       context "when the callback should skip the first N events" do
-        let!(:callback) { instance.once_on(:event, skip: 1) { |*args| instance.true(*args) } }
+        let!(:callback) { instance.until_true_on(:event, skip: 1) { |*args| instance.true(*args) } }
         it { is_expected.not_to send_message(:true).to(instance) }
         it { is_expected.to be true }
 
@@ -299,6 +313,13 @@ describe CallbacksAttachable do
             it { is_expected.not_to send_message(:true).to(instance).with(:arg) }
             it { is_expected.to be true }
           end
+        end
+
+        context "when there is another instance triggering the same event" do
+          let(:instance2) { klass.new }
+          before { instance2.trigger(:event, :arg) }
+          it { is_expected.not_to send_message(:method).to(instance) }
+          it { is_expected.to be true }
         end
 
         context "when the callback is deregistered" do

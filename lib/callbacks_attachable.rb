@@ -83,10 +83,12 @@ module CallbacksAttachable
 
   private
 
-  def if_self(*args, &block)
+  def if_self(*args, skip: 0, &block)
     instance = self
-    self.class.__send__(*args) do |*args|
+    count = 0
+    self.class.__send__(*args, skip: 0) do |*args|
       next if instance != self
+      next unless (count += 1) > skip
       block.call(*args)
     end
   end
