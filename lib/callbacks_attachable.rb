@@ -63,8 +63,8 @@ module CallbacksAttachable
   end
 
   def once_on(*args, &block)
-    if_self(:until_true_on, *args) do |*args|
-      block.call(*args)
+    if_self(:until_true_on, *args) do |*trigger_args|
+      yield *trigger_args
       true
     end
   end
@@ -86,10 +86,10 @@ module CallbacksAttachable
   def if_self(*args, skip: 0, &block)
     instance = self
     count = 0
-    self.class.__send__(*args, skip: 0) do |*args|
+    self.class.__send__(*args, skip: 0) do |*trigger_args|
       next if instance != self
       next unless (count += 1) > skip
-      block.call(*args)
+      yield *trigger_args
     end
   end
 end
