@@ -8,12 +8,12 @@ module CallbacksAttachable
   module ClassMethods
     def on(event, skip: 0, &callback)
       count = 0
-      callbacks[event] ||= []
-      callbacks[event] << proc do |*args|
+      all_instances_callbacks[event] ||= []
+      all_instances_callbacks[event] << proc do |*args|
         next unless (count += 1) > skip
         instance_exec(*args, &callback)
       end
-      callbacks[event].last
+      all_instances_callbacks[event].last
     end
 
     def once_on(event, *opts, &callback)
@@ -34,27 +34,27 @@ module CallbacksAttachable
     end
 
     def trigger(event, *args, context: self)
-      return true unless callbacks[event]
+      return true unless all_instances_callbacks[event]
 
       # dup the callback list so that removing callbacks while iterating does
       # still call all callbacks during map.
-      callbacks[event].dup.all? do |callback|
+      all_instances_callbacks[event].dup.all? do |callback|
         context.instance_exec(*args, &callback) != false
       end
     end
 
     def off(event, callback)
-      if callbacks[event]
-        callbacks[event].delete(callback)
-        callbacks.delete(event) if callbacks[event].empty?
+      if all_instances_callbacks[event]
+        all_instances_callbacks[event].delete(callback)
+        all_instances_callbacks.delete(event) if all_instances_callbacks[event].empty?
       end
       true
     end
 
     private
 
-    def callbacks
-      @callbacks ||= {}
+    def all_instances_callbacks
+      @all_instances_callbacks ||= {}
     end
   end
 
