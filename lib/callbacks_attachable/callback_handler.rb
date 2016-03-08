@@ -37,6 +37,7 @@ module CallbacksAttachable
     end
 
     def off(event, callback)
+      return unless __callbacks__[event]
       __callbacks__[event].delete(callback)
     end
 
