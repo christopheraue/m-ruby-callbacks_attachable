@@ -53,8 +53,7 @@ module CallbacksAttachable
   end
 
   def trigger(*args)
-    self.class.trigger(*args, instance: self)
-    __callback_handler__.trigger(*args)
+    self.class.trigger(*args, instance: self) and __callback_handler__.trigger(*args)
   end
 
   private
