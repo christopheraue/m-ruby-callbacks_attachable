@@ -1,5 +1,5 @@
 module CallbacksAttachable
-  class CallbackHandler
+  class CallbackRegistry
     def initialize(object, callback_class)
       @object = object
       @callback_class = callback_class

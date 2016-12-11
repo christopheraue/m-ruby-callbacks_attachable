@@ -1,5 +1,5 @@
 require_relative "../mrblib/callbacks_attachable"
 require_relative "../mrblib/version"
-require_relative "../mrblib/callback_handler"
+require_relative "../mrblib/callback_registry"
 require_relative "../mrblib/instance_callback"
 require_relative "../mrblib/all_instances_callback"
