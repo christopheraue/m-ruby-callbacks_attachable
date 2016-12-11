@@ -1,13 +1,13 @@
 module CallbacksAttachable
   class InstanceCallback
-    def initialize(instance, skip: 0, &callback)
+    def initialize(instance, opts = {}, &callback)
       @instance = instance
-      @skip = skip
+      @skip = opts.fetch(:skip, 0)
       @callback = callback
       @call_count = 0
     end
 
-    def call(*args, **opts)
+    def call(instance, args)
       @call_count += 1
       return true if @call_count <= @skip
       @callback.call(*args) != false

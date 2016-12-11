@@ -25,8 +25,12 @@ module CallbacksAttachable
       __callback_handler__.off(*args)
     end
 
-    def trigger(*args)
-      __callback_handler__.trigger(*args)
+    def trigger(event, *args)
+      __callback_handler__.trigger(nil, event, args)
+    end
+
+    def trigger_for(instance, event, *args)
+      __callback_handler__.trigger(instance, event, args)
     end
 
     private
@@ -52,8 +56,8 @@ module CallbacksAttachable
     __callback_handler__.off(*args)
   end
 
-  def trigger(*args)
-    self.class.trigger(*args, instance: self) and __callback_handler__.trigger(*args)
+  def trigger(event, *args)
+    self.class.trigger_for(self, event, *args) and __callback_handler__.trigger(self, event, args)
   end
 
   private
