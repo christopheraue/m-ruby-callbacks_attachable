@@ -96,25 +96,25 @@ AClass.trigger(:count_to_two) # => does nothing
 All above mentioned methods on the class level also exist for each instance of
 the class. Callbacks for an individual instance are executed by calling
 `#trigger` on it. They are also called, when calling `.trigger` or
-`.trigger_for(instance, ...)` on the its class.
+`.trigger_for(instance, ...)` on its class.
 
 Callbacks attached to individual instances are evaluated in their lexical scope.
 So, `self` inside and outside the callback is the same object.
 
 ```ruby
-callbacks_holder1 = AClass.new
-callbacks_holder2 = AClass.new
+an_instance1 = AClass.new
+an_instance2 = AClass.new
 
-callback1 = callbacks_holder1.on(:event) { puts 'This is #1!' }
-callback2 = callbacks_holder2.on(:event) { puts 'This is #2!' }
+callback1 = an_instance1.on(:event) { puts 'This is #1!' }
+callback2 = an_instance2.on(:event) { puts 'This is #2!' }
 
-callbacks_holder1.trigger(:event) # => puts 'This is #1!'
-callbacks_holder2.trigger(:event) # => puts 'This is #2!'
+an_instance1.trigger(:event) # => puts 'This is #1!'
+an_instance2.trigger(:event) # => puts 'This is #2!'
 
 AClass.trigger(:event) # => puts 'This is #1!' and 'This is #2!'
 
-callbacks_holder1.off(:event, callback)
-callbacks_holder2.off(:event, callback)
+an_instance1.off(:event, callback)
+an_instance2.off(:event, callback)
 ```
 
 The two methods `#once_on` and `#until_true_on` are available for instances,
