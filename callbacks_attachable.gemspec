@@ -11,10 +11,10 @@ particular instance. Additionally, instances can also have their own set of
 individual callbacks.
   DESC
 
-  spec.homepage      = "https://github.com/christopheraue/ruby-callbacks_attachable"
+  spec.homepage      = "https://github.com/christopheraue/m-ruby-callbacks_attachable"
   spec.license       = "MIT"
   spec.authors       = ["Christopher Aue"]
-  spec.email         = "rubygems@christopheraue.net"
+  spec.email         = ["rubygems@christopheraue.net"]
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }

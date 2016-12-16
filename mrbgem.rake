@@ -8,7 +8,8 @@ Attach callbacks to a class and trigger them for all its instances or just one
 particular instance. Additionally, instances can also have their own set of
 individual callbacks.
 DESC
-  spec.homepage     = "https://github.com/christopheraue/ruby-callbacks_attachable"
+
+  spec.homepage     = "https://github.com/christopheraue/m-ruby-callbacks_attachable"
   spec.license      = 'MIT'
   spec.authors      = ['Christopher Aue']
 
