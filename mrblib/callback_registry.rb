@@ -3,12 +3,13 @@ module CallbacksAttachable
     def initialize(object, callback_class)
       @object = object
       @callback_class = callback_class
+      @callbacks = {}
     end
 
     def on(event, opts = {}, &callback)
-      __callbacks__[event] ||= []
-      __callbacks__[event] << @callback_class.new(@object, opts, &callback)
-      __callbacks__[event].last
+      @callbacks[event] ||= []
+      @callbacks[event] << @callback_class.new(@object, opts, &callback)
+      @callbacks[event].last
     end
 
     def once_on(event, *opts, &callback)
@@ -29,22 +30,16 @@ module CallbacksAttachable
     end
 
     def trigger(instance, event, args)
-      return true if __callbacks__[event].nil?
+      return true unless @callbacks[event]
 
       # dup the callback list so that removing callbacks while iterating does
       # still call all callbacks during map.
-      __callbacks__[event].dup.all?{ |callback| callback.call(instance, args) }
+      @callbacks[event].dup.all?{ |callback| callback.call(instance, args) }
     end
 
     def off(event, callback)
-      return unless __callbacks__[event]
-      __callbacks__[event].delete(callback)
-    end
-
-    private
-
-    def __callbacks__
-      @__callbacks__ ||= {}
+      return unless @callbacks[event]
+      @callbacks[event].delete(callback)
     end
   end
 end

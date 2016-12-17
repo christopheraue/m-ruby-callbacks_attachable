@@ -29,8 +29,6 @@ module CallbacksAttachable
     end
     alias trigger_event trigger
 
-    private
-
     def __callback_registry__
       @__callback_registry__ ||= CallbackRegistry.new(self, AllInstancesCallback)
     end
@@ -57,7 +55,7 @@ module CallbacksAttachable
   alias off_event off
 
   def trigger(event, *args)
-    self.class.__send__(:__callback_registry__).trigger(self, event, args) and __callback_registry__.trigger(self, event, args)
+    self.class.__callback_registry__.trigger(self, event, args) and __callback_registry__.trigger(self, event, args)
   end
   alias trigger_event trigger
 
