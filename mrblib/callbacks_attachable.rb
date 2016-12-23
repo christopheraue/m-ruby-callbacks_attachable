@@ -1,12 +1,17 @@
 module CallbacksAttachable
   def self.included(klass)
     klass.extend ClassMethods
-    klass.inherited(klass)
+    klass.__init_callback_registry__
   end
 
   module ClassMethods
+    def __init_callback_registry__
+      @__callback_registry__ ||= CallbackRegistry.new(self, AllInstancesCallback)
+    end
+
     def inherited(klass)
-      klass.instance_eval{ @__callback_registry__ = CallbackRegistry.new(klass, AllInstancesCallback) }
+      klass.__init_callback_registry__
+      super
     end
 
     def on(*args, &block)
