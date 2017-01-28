@@ -1,30 +1,30 @@
 module CallbacksAttachable
   class CallbackRegistry
-    def initialize(object, callback_class)
-      @object = object
+    def initialize(subject, callback_class)
+      @subject = subject
       @callback_class = callback_class
       @callbacks = {}
     end
 
     def on(event, opts = {}, &callback)
       @callbacks[event] ||= []
-      @callbacks[event] << @callback_class.new(@object, opts, &callback)
+      @callbacks[event] << @callback_class.new(@subject, opts, &callback)
       @callbacks[event].last
     end
 
     def once_on(event, *opts, &callback)
-      object = @object
-      registered_callback = @object.on(event, *opts) do |*args|
-        object.off(event, registered_callback)
+      subject = @subject
+      registered_callback = @subject.on(event, *opts) do |*args|
+        subject.off(event, registered_callback)
         yield(*args)
       end
     end
 
     def until_true_on(event, *opts, &callback)
-      object = @object
-      registered_callback = @object.on(event, *opts) do |*args|
+      subject = @subject
+      registered_callback = @subject.on(event, *opts) do |*args|
         yield(*args).tap do |result|
-          object.off(event, registered_callback) if result
+          subject.off(event, registered_callback) if result
         end
       end
     end
