@@ -13,18 +13,18 @@ module CallbacksAttachable
     end
 
     def once_on(event, *opts, &callback)
-      callback_registry = self
+      object = @object
       registered_callback = @object.on(event, *opts) do |*args|
-        callback_registry.off(event, registered_callback)
+        object.off(event, registered_callback)
         yield(*args)
       end
     end
 
     def until_true_on(event, *opts, &callback)
-      callback_registry = self
+      object = @object
       registered_callback = @object.on(event, *opts) do |*args|
         yield(*args).tap do |result|
-          callback_registry.off(event, registered_callback) if result
+          object.off(event, registered_callback) if result
         end
       end
     end
