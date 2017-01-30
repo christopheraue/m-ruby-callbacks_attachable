@@ -62,12 +62,20 @@ module CallbacksAttachable
 
   def trigger(event, *args)
     inst_triggered = (not @__callback_registry__ or @__callback_registry__.trigger(self, event, args))
-    @__class_callback_registry__ ||= self.class.instance_eval{ @__callback_registry__ }
+    @__class_callback_registry__ ||= __class_callback_registry__
     inst_triggered and @__class_callback_registry__.trigger(self, event, args)
   end
   alias trigger_event trigger
 
+  def triggers_on?(event)
+    __callback_registry__.triggers_on? event or __class_callback_registry__.triggers_on? event
+  end
+
   private def __callback_registry__
     @__callback_registry__ ||= CallbackRegistry.new(self, InstanceCallback)
+  end
+
+  private def __class_callback_registry__
+    @__class_callback_registry__ ||= self.class.instance_eval{ @__callback_registry__ }
   end
 end

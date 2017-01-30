@@ -29,6 +29,10 @@ module CallbacksAttachable
       end
     end
 
+    def triggers_on?(event)
+      !!@callbacks[event] && @callbacks[event].any?
+    end
+
     def trigger(instance, event, args)
       return true unless @callbacks[event]
 
