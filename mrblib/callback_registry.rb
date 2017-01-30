@@ -8,7 +8,7 @@ module CallbacksAttachable
 
     def on(event, opts = {}, &callback)
       @callbacks[event] ||= []
-      @callbacks[event] << @callback_class.new(@subject, opts, &callback)
+      @callbacks[event] << @callback_class.new(@subject, event, opts, &callback)
       @callbacks[event].last
     end
 
