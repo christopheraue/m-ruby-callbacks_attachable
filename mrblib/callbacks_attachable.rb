@@ -29,6 +29,10 @@ module CallbacksAttachable
     end
     alias trigger_event trigger
 
+    def triggers_on?(event)
+      __callback_registry__.triggers_on? event
+    end
+
     private def __callback_registry__
       @__callback_registry__ ||= CallbackRegistry.new(self, AllInstancesCallback)
     end
@@ -62,7 +66,7 @@ module CallbacksAttachable
   alias trigger_event trigger
 
   def triggers_on?(event)
-    __callback_registry__.triggers_on? event or __class_callback_registry__.triggers_on? event
+    __callback_registry__.triggers_on? event
   end
 
   private def __callback_registry__
