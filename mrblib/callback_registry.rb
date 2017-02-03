@@ -37,8 +37,9 @@ module CallbacksAttachable
       return true unless @callbacks[event]
 
       # dup the callback list so that removing callbacks while iterating does
-      # still call all callbacks during map.
-      @callbacks[event].dup.all?{ |callback| callback.call(instance, args) }
+      # still call all callbacks.
+      @callbacks[event].dup.each{ |callback| callback.call(instance, args) }
+      true
     end
 
     def off(event, callback)

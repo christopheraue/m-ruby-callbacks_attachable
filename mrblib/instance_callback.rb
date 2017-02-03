@@ -11,7 +11,7 @@ module CallbacksAttachable
     def call(instance, args)
       @call_count += 1
       return true if @call_count <= @skip
-      @callback.call(*args) != false
+      @callback.call(*args)
     end
 
     def cancel
