@@ -3,14 +3,16 @@ module CallbacksAttachable
     def initialize(owner, event, opts = {}, &callback)
       @owner = owner
       @event = event
-      @skip = opts.fetch(:skip, 0)
+      @skip_condition = opts.fetch(:skip, false)
+      @cancel_condition = opts.fetch(:until, false)
       @callback = callback
       @call_count = 0
     end
 
     def call(instance, args)
       @call_count += 1
-      return true if @call_count <= @skip
+      return if @skip_condition and @skip_condition.call @call_count
+      cancel if @cancel_condition and @cancel_condition.call @call_count
       @callback.call(*args, instance)
     end
 
