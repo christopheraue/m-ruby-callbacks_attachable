@@ -4,6 +4,10 @@ module CallbacksAttachable
       __callbacks__.register(event, opts, callback)
     end
 
+    def once_on(event, opts = {}, &callback)
+      __callbacks__.register(event, opts.merge(until: proc{ true }), callback)
+    end
+
     def on?(event)
       __callbacks__.registered? event
     end
