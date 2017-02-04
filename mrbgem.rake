@@ -4,9 +4,8 @@ MRuby::Gem::Specification.new('mruby-callbacks_attachable') do |spec|
   spec.version      = CallbacksAttachable::VERSION
   spec.summary      = %q{Attach callbacks to classes or individual instances.}
   spec.description  = <<-DESC
-Attach callbacks to a class and trigger them for all its instances or just one
-particular instance. Additionally, instances can also have their own set of
-individual callbacks.
+Attach callbacks to classes to be triggered for all instances or attach them
+to an individual instance to be triggered only for this instance.
 DESC
 
   spec.homepage     = "https://github.com/christopheraue/m-ruby-callbacks_attachable"
