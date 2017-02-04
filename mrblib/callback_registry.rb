@@ -11,7 +11,7 @@ module CallbacksAttachable
     end
 
     def registered?(event)
-      @callbacks.key? event and @callbacks[event].any?
+      @callbacks.key? event
     end
 
     def trigger(instance, event, args)
@@ -20,6 +20,7 @@ module CallbacksAttachable
 
     def deregister(event, callback)
       @callbacks[event].delete(callback)
+      @callbacks.delete(event) if @callbacks[event].empty?
     end
   end
 end
