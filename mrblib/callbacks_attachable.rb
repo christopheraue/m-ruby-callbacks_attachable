@@ -34,7 +34,7 @@ module CallbacksAttachable
     end
 
     private def __callback_registry__
-      @__callback_registry__ ||= CallbackRegistry.new(self, AllInstancesCallback)
+      @__callback_registry__ ||= CallbackRegistry.new(self)
     end
   end
 
@@ -70,7 +70,7 @@ module CallbacksAttachable
   end
 
   private def __callback_registry__
-    @__callback_registry__ ||= CallbackRegistry.new(self, InstanceCallback)
+    @__callback_registry__ ||= CallbackRegistry.new(self)
   end
 
   private def __class_callback_registry__

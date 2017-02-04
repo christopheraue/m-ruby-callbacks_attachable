@@ -1,7 +1,7 @@
 module CallbacksAttachable
-  class InstanceCallback
-    def initialize(instance, event, opts = {}, &callback)
-      @instance = instance
+  class Callback
+    def initialize(owner, event, opts = {}, &callback)
+      @owner = owner
       @event = event
       @skip = opts.fetch(:skip, 0)
       @callback = callback
@@ -11,11 +11,11 @@ module CallbacksAttachable
     def call(instance, args)
       @call_count += 1
       return true if @call_count <= @skip
-      @callback.call(*args)
+      @callback.call(*args, instance)
     end
 
     def cancel
-      @instance.off @event, self
+      @owner.off @event, self
     end
   end
 end
