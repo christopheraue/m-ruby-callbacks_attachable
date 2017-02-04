@@ -7,7 +7,7 @@ module CallbacksAttachable
 
     def on(event, opts = {}, &callback)
       @callbacks[event] ||= []
-      @callbacks[event] << Callback.new(@owner, event, opts, &callback)
+      @callbacks[event] << Callback.new(self, event, opts, &callback)
       @callbacks[event].last
     end
 
@@ -25,7 +25,6 @@ module CallbacksAttachable
     end
 
     def off(event, callback)
-      return unless @callbacks[event]
       @callbacks[event].delete(callback)
     end
   end

@@ -9,11 +9,6 @@ module CallbacksAttachable
     end
     alias on_event on
 
-    def off(*args)
-      __callback_registry__.off(*args)
-    end
-    alias off_event off
-
     def trigger(event, *args)
       ObjectSpace.each_object(self).all?{ |inst| inst.trigger(event, *args) }
     end
@@ -32,11 +27,6 @@ module CallbacksAttachable
     __callback_registry__.on(event, opts, &block)
   end
   alias on_event on
-
-  def off(*args)
-    __callback_registry__.off(*args)
-  end
-  alias off_event off
 
   def trigger(event, *args)
     instance_triggered = (not @__callback_registry__ or @__callback_registry__.trigger(self, event, args))
