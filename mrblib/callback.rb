@@ -6,11 +6,9 @@ module CallbacksAttachable
       @call_condition = opts.fetch(:if, false)
       @cancel_condition = opts.fetch(:until, false)
       @callback = callback
-      @call_count = 0
     end
 
     def call(instance, args)
-      @call_count += 1
       return if @call_condition and not @call_condition.call instance, *args
       cancel if @cancel_condition and @cancel_condition.call instance, *args
       @callback.call(instance, *args)
