@@ -4,7 +4,7 @@ module CallbacksAttachable
       __callbacks__.register(event, opts, callback)
     end
 
-    def triggers_on?(event)
+    def on?(event)
       __callbacks__.registered? event
     end
 
