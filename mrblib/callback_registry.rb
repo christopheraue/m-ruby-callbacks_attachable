@@ -7,7 +7,9 @@ module CallbacksAttachable
 
     def register(event, opts, callback)
       @callbacks[event] ||= {}
-      @callbacks[event][Callback.new(self, event, opts, callback)] = true
+      callback = Callback.new(self, event, opts, callback)
+      @callbacks[event][callback] = true
+      callback
     end
 
     def registered?(event)
