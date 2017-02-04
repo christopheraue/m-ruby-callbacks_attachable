@@ -13,7 +13,7 @@ module CallbacksAttachable
       @call_count += 1
       return if @skip_condition and @skip_condition.call @call_count
       cancel if @cancel_condition and @cancel_condition.call @call_count
-      @callback.call(*args, instance)
+      @callback.call(instance, *args)
     end
 
     def cancel
