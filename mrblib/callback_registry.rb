@@ -5,26 +5,20 @@ module CallbacksAttachable
       @callbacks = {}
     end
 
-    def on(event, opts = {}, &callback)
-      @callbacks[event] ||= []
-      @callbacks[event] << Callback.new(self, event, opts, &callback)
-      @callbacks[event].last
+    def register(event, opts, callback)
+      @callbacks[event] ||= {}
+      @callbacks[event][Callback.new(self, event, opts, callback)] = true
     end
 
-    def triggers_on?(event)
-      !!@callbacks[event] && @callbacks[event].any?
+    def registered?(event)
+      @callbacks.key? event and @callbacks[event].any?
     end
 
     def trigger(instance, event, args)
-      return true unless @callbacks[event]
-
-      # dup the callback list so that removing callbacks while iterating does
-      # still call all callbacks.
-      @callbacks[event].dup.each{ |callback| callback.call(instance, args) }
-      true
+      @callbacks[event] and @callbacks[event].keys.each{ |callback| callback.call(instance, args) }
     end
 
-    def off(event, callback)
+    def deregister(event, callback)
       @callbacks[event].delete(callback)
     end
   end

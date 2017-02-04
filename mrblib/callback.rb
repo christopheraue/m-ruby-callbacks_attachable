@@ -1,6 +1,6 @@
 module CallbacksAttachable
   class Callback
-    def initialize(registry, event, opts = {}, &callback)
+    def initialize(registry, event, opts = {}, callback)
       @registry = registry
       @event = event
       @skip_condition = opts.fetch(:skip, false)
@@ -17,7 +17,7 @@ module CallbacksAttachable
     end
 
     def cancel
-      @registry.off @event, self
+      @registry.deregister @event, self
     end
   end
 end

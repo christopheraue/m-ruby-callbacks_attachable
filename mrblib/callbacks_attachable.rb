@@ -4,8 +4,8 @@ module CallbacksAttachable
   end
 
   module ClassMethods
-    def on(event, opts = {}, &block)
-      __callback_registry__.on(event, opts, &block)
+    def on(event, opts = {}, &callback)
+      __callback_registry__.register(event, opts, callback)
     end
     alias on_event on
 
@@ -15,7 +15,7 @@ module CallbacksAttachable
     alias trigger_event trigger
 
     def triggers_on?(event)
-      __callback_registry__.triggers_on? event
+      __callback_registry__.registered? event
     end
 
     private def __callback_registry__
@@ -23,20 +23,20 @@ module CallbacksAttachable
     end
   end
 
-  def on(event, opts = {}, &block)
-    __callback_registry__.on(event, opts, &block)
+  def on(event, opts = {}, &callback)
+    __callback_registry__.register(event, opts, callback)
   end
   alias on_event on
 
   def trigger(event, *args)
-    instance_triggered = (not @__callback_registry__ or @__callback_registry__.trigger(self, event, args))
-    class_triggered = (@__class_callback_registry__ || __class_callback_registry__).trigger(self, event, args)
-    instance_triggered and class_triggered
+    (not @__callback_registry__ or @__callback_registry__.trigger(self, event, args))
+    (@__class_callback_registry__ || __class_callback_registry__).trigger(self, event, args)
+    true
   end
   alias trigger_event trigger
 
   def triggers_on?(event)
-    __callback_registry__.triggers_on? event
+    __callback_registry__.registered? event
   end
 
   private def __callback_registry__
