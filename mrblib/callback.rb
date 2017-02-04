@@ -10,8 +10,8 @@ module CallbacksAttachable
 
     def call(instance, args)
       return if @call_condition and not @call_condition.call instance, *args
-      cancel if @cancel_condition and @cancel_condition.call instance, *args
       @callback.call(instance, *args)
+      cancel if @cancel_condition and @cancel_condition.call instance, *args
     end
 
     def on_cancel(&on_cancel)

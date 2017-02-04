@@ -32,9 +32,9 @@ module CallbacksAttachable
   end
 
   def trigger(event, *args)
-    @__callbacks__ and @__callbacks__.trigger(self, event, args)
     @class_callbacks ||= self.class.__send__ :__callbacks__
     @class_callbacks.trigger(self, event, args)
+    @__callbacks__ and @__callbacks__.trigger(self, event, args)
     true
   end
 end
