@@ -16,8 +16,14 @@ module CallbacksAttachable
       @callback.call(instance, *args)
     end
 
+    def on_cancel(&on_cancel)
+      @on_cancel = on_cancel
+    end
+
     def cancel
       @registry.deregister @event, self
+      @on_cancel.call if @on_cancel
+      true
     end
   end
 end
