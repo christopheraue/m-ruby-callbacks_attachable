@@ -3,7 +3,7 @@ module CallbacksAttachable
     def initialize(registry, event, opts = {}, callback)
       @registry = registry
       @event = event
-      @skip_condition = opts.fetch(:skip, false)
+      @call_condition = opts.fetch(:if, false)
       @cancel_condition = opts.fetch(:until, false)
       @callback = callback
       @call_count = 0
@@ -11,8 +11,8 @@ module CallbacksAttachable
 
     def call(instance, args)
       @call_count += 1
-      return if @skip_condition and @skip_condition.call @call_count
-      cancel if @cancel_condition and @cancel_condition.call @call_count
+      return if @call_condition and @call_condition.call instance, *args
+      cancel if @cancel_condition and @cancel_condition.call instance, *args
       @callback.call(instance, *args)
     end
 
