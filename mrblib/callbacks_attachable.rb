@@ -1,7 +1,7 @@
 module CallbacksAttachable
   module RegistryOwnable
     def on(event, opts = {}, &callback)
-      __callbacks__.register(event, opts, callback)
+      (@__callbacks__ ||= CallbackRegistry.new self).register(event, opts, callback)
     end
 
     def once_on(event, opts = {}, &callback)
@@ -9,32 +9,38 @@ module CallbacksAttachable
     end
 
     def on?(event)
-      __callbacks__.registered? event
+      @__callbacks__ ? (@__callbacks__.registered? event) : false
     end
-
-    private def __callbacks__
-      @__callbacks__ ||= CallbackRegistry.new(self)
-    end
-  end
-
-  include RegistryOwnable
-
-  def self.included(klass)
-    klass.extend ClassMethods
-  end
-
-  module ClassMethods
-    include RegistryOwnable
 
     def trigger(event, *args)
-      ObjectSpace.each_object(self).all?{ |inst| inst.trigger(event, *args) }
+      ObjectSpace.each_object(self).each do |inst|
+        trigger_for_instance(inst, event, args)
+      end
     end
+
+    def trigger_for_instance(inst, event, args)
+      @__callbacks__ and @__callbacks__.trigger(inst, event, args)
+      :triggered
+    end
+  end
+
+  def self.included(klass)
+    klass.extend RegistryOwnable
+  end
+
+  def on(*args, &callback)
+    singleton_class.on *args, &callback
+  end
+
+  def once_on(*args, &callback)
+    singleton_class.once_on *args, &callback
+  end
+
+  def on?(event)
+    singleton_class.on? event
   end
 
   def trigger(event, *args)
-    @class_callbacks ||= self.class.__send__ :__callbacks__
-    @class_callbacks.trigger(self, event, args)
-    @__callbacks__ and @__callbacks__.trigger(self, event, args)
-    true
+    singleton_class.trigger_for_instance(self, event, args)
   end
 end
