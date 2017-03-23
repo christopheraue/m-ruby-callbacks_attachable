@@ -23,6 +23,9 @@ module CallbacksAttachable
     end
 
     def trigger_for_instance(inst, event, args)
+      if superclass.respond_to? :trigger_for_instance
+        superclass.trigger_for_instance(inst, event, args)
+      end
       @__callbacks__ and @__callbacks__.trigger(inst, event, args)
       :triggered
     end
