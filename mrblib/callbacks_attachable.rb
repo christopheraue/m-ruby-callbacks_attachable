@@ -47,8 +47,8 @@ module CallbacksAttachable
     singleton_class.on *args, &callback
   end
 
-  def once_on(*args, &callback)
-    singleton_class.once_on *args, &callback
+  def once_on(event, opts = {}, &callback)
+    on(event, opts.merge(until: proc{ true }), &callback)
   end
 
   def on?(event)
