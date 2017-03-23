@@ -1,5 +1,9 @@
 module CallbacksAttachable
   module RegistryOwnable
+    def extended(object)
+      object.singleton_class.extend RegistryOwnable
+    end
+
     def on(event, opts = {}, &callback)
       (@__callbacks__ ||= CallbackRegistry.new self).register(event, opts, callback)
     end
@@ -22,6 +26,10 @@ module CallbacksAttachable
       @__callbacks__ and @__callbacks__.trigger(inst, event, args)
       :triggered
     end
+  end
+
+  def self.extended(object)
+    object.singleton_class.extend RegistryOwnable
   end
 
   def self.included(klass)
