@@ -5,7 +5,7 @@ module CallbacksAttachable
     end
 
     def on(event, opts = {}, &callback)
-      (@__callbacks__ ||= CallbackRegistry.new self).register(event, opts, callback)
+      __callbacks__.register(event, opts, callback)
     end
 
     def once_on(event, opts = {}, &callback)
@@ -28,6 +28,10 @@ module CallbacksAttachable
       end
       @__callbacks__ and @__callbacks__.trigger(inst, event, args)
       :triggered
+    end
+
+    def __callbacks__
+      @__callbacks__ ||= CallbackRegistry.new self
     end
   end
 
