@@ -1,7 +1,11 @@
 module CallbacksAttachable
   module RegistryOwnable
     def extended(object)
-      object.singleton_class.extend RegistryOwnable
+      CallbacksAttachable.extended object
+    end
+
+    def included(klass)
+      CallbacksAttachable.included klass
     end
 
     def on(event, opts = {}, &callback)
