@@ -1,5 +1,2 @@
-require_relative "../mrblib/callbacks_attachable"
-require_relative "../mrblib/version"
-require_relative "../mrblib/callback_registry"
-require_relative "../mrblib/callback"
-require_relative "../mrblib/error"
+dir = File.dirname File.dirname __FILE__
+Dir[File.join(dir, 'mrblib', '*.rb')].reject{ |f| f.end_with? '_m.rb' }.sort.each{ |f| require f }
