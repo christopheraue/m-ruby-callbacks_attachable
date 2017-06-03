@@ -1,19 +1,105 @@
 require 'spec_helper'
 
-class CallbacksAttached
-  include CallbacksAttachable
-
-  def self.method(*args, &block) :result end
-  def self.true(*args, &block) true end
-  def self.false(*args, &block) false end
-  def method(*args, &block) :result end
-  def true(*args, &block) true end
-  def false(*args, &block) false end
-end
-
-describe CallbacksAttachable do
-  subject(:klass) { CallbacksAttached.clone }
+describe "CallbacksAttachable included into a regular class" do
+  let!(:klass) { Class.new{ include CallbacksAttachable } }
   subject(:instance) { klass.new }
 
-  it "needs to be tested"
+  let(:callback) { proc{} }
+
+  context "when a callback is attached to the class" do
+    before { klass.on(:event) do |*args|
+      callback.call(*args)
+    end }
+
+    context "when the event is triggered" do
+      subject { instance.trigger(:event, :arg) }
+      before { expect(callback).to receive(:call).with(instance, :arg) }
+      it { expect{ subject }.not_to raise_error }
+    end
+  end
+
+  context "when a callback is attached to an instance's singleton class" do
+    before { instance.singleton_class.on(:event) do |*args|
+      callback.call(*args)
+    end }
+
+    context "when the event is triggered" do
+      subject { instance.trigger(:event, :arg) }
+      before { expect(callback).to receive(:call).with(instance, :arg) }
+      it { expect{ subject }.not_to raise_error }
+    end
+  end
+
+  context "when a callback is attached to an instance" do
+    before { instance.on(:event) do |*args|
+      callback.call(*args)
+    end }
+
+    context "when the event is triggered" do
+      subject { instance.trigger(:event, :arg) }
+      before { expect(callback).to receive(:call).with(instance, :arg) }
+      it { expect{ subject }.not_to raise_error }
+    end
+  end
+end
+
+describe "CallbacksAttachable included into a singleton class" do
+  subject(:instance) { Object.new.extend CallbacksAttachable }
+  before { instance.singleton_class.class_eval{ include CallbacksAttachable } }
+
+  let(:callback) { proc{} }
+
+  context "when a callback is attached to the singleton class" do
+    before { instance.singleton_class.on(:event) do |*args|
+      callback.call(*args)
+    end }
+
+    context "when the event is triggered" do
+      subject { instance.trigger(:event, :arg) }
+      before { expect(callback).to receive(:call).with(instance, :arg) }
+      it { expect{ subject }.not_to raise_error }
+    end
+  end
+
+  context "when a callback is attached to an instance" do
+    before { instance.on(:event) do |*args|
+      callback.call(*args)
+    end }
+
+    context "when the event is triggered" do
+      subject { instance.trigger(:event, :arg) }
+      before { expect(callback).to receive(:call).with(instance, :arg) }
+      it { expect{ subject }.not_to raise_error }
+    end
+  end
+end
+
+describe "CallbacksAttachable extending an object" do
+  subject(:instance) { Object.new.extend CallbacksAttachable }
+
+  let(:callback) { proc{} }
+
+  context "when a callback is attached to the singleton class" do
+    before { instance.singleton_class.on(:event) do |*args|
+      callback.call(*args)
+    end }
+
+    context "when the event is triggered" do
+      subject { instance.trigger(:event, :arg) }
+      before { expect(callback).to receive(:call).with(instance, :arg) }
+      it { expect{ subject }.not_to raise_error }
+    end
+  end
+
+  context "when a callback is attached to an instance" do
+    before { instance.on(:event) do |*args|
+      callback.call(*args)
+    end }
+
+    context "when the event is triggered" do
+      subject { instance.trigger(:event, :arg) }
+      before { expect(callback).to receive(:call).with(instance, :arg) }
+      it { expect{ subject }.not_to raise_error }
+    end
+  end
 end
