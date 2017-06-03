@@ -1,13 +1,13 @@
 module CallbacksAttachable
   class CallbackRegistry
-    def initialize(owner)
-      @owner = owner
+    def initialize(owner_class)
+      @singleton_owner = owner_class.singleton_class?
       @callbacks = {}
     end
 
     def register(event, opts, callback)
       @callbacks[event] ||= {}
-      callback = Callback.new(self, event, opts, callback)
+      callback = Callback.new(self, event, opts, !@singleton_owner, callback)
       @callbacks[event][callback] = true
       callback
     end

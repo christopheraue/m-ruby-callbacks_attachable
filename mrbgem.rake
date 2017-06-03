@@ -13,4 +13,5 @@ DESC
   spec.authors      = ['Christopher Aue']
 
   spec.add_dependency 'mruby-objectspace', :core => 'mruby-objectspace'
+  spec.add_dependency 'mruby-object-ext', :core => 'mruby-object-ext'
 end
