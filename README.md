@@ -34,8 +34,8 @@ end
 Attach callbacks for an event for all instances of a class with:
 
 ```ruby
-callback = AClass.on(:event) do |instance, method|
-    puts instance.__send__(method)
+callback = AClass.on(:event) do |method|
+  puts __send__(method)
 end
 
 instance0 = AClass.new(value: 0)
@@ -45,9 +45,10 @@ AClass.trigger(:event, :value) # => 0
                                #    1
 ```
 
-The first argument of the callback is the instance the callback is executed
-for. The second and further arguments given to `.trigger` are passed to the
-callback as additional arguments.
+Callbacks attached to a class are evaluated in the context of the instance they
+are triggered for with `#instance_exec`. This means `self` inside the callback
+is the instance the callback is evaluated for. The arguments given to
+`.trigger` are passed to the callback as additional arguments.
 
 Registering a callback returns a `Callback` object. To cancel the callback use
 `#cancel` on that object.
@@ -86,7 +87,9 @@ callback just for the first instance meeting certain criteria.
 ### Callbacks attached to an instance
 
 All above mentioned methods on the class level also exist for each instance of
-the class.
+the class. With one exception: Callbacks are executed bound to the context its
+block was defined, just like normal blocks are. `self` inside a callback is the
+same as outside of it.
 
 Callbacks for an individual instance are executed by calling `#trigger` on it.
 This also executes callbacks attached to the class.
