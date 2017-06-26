@@ -20,6 +20,4 @@ to an individual instance to be triggered only for this instance.
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.8"
-  spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec", "~> 3.4"
 end
