@@ -5,10 +5,16 @@ module CallbacksAttachable
       @callbacks = {}
     end
 
-    def register(event, opts, callback)
-      @callbacks[event] ||= {}
-      callback = Callback.new(self, event, opts, !@singleton_owner, callback)
-      @callbacks[event][callback] = true
+    def register(*events, opts, callback)
+      unless opts.is_a? Hash
+        events << opts
+        opts = {}
+      end
+      callback = Callback.new(self, events, opts, !@singleton_owner, callback)
+      events.each do |event|
+        @callbacks[event] ||= {}
+        @callbacks[event][callback] = true
+      end
       callback
     end
 

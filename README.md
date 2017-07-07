@@ -58,6 +58,12 @@ callback = AClass.on(:event) { do_something }
 callback.cancel
 ```
 
+A callback can also be registered for multiple events:
+
+```ruby
+AClass.on(:event1, :event2, :event3, opts, &callback) 
+```
+
 If you want to execute a callback just a single time attach it with `.once_on`:
 
 ```ruby

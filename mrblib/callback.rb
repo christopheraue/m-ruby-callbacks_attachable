@@ -1,8 +1,8 @@
 module CallbacksAttachable
   class Callback
-    def initialize(registry, event, opts, instance_scope, callback)
+    def initialize(registry, events, opts, instance_scope, callback)
       @registry = registry
-      @event = event
+      @events = events
       @call_condition = opts.fetch(:if, false)
       @cancel_condition = opts.fetch(:until, false)
       @instance_scope = instance_scope
@@ -28,7 +28,7 @@ module CallbacksAttachable
       if @canceled
         raise Error, 'already canceled'
       else
-        @registry.deregister @event, self
+        @events.each{ |event| @registry.deregister event, self }
         @on_cancel.call if @on_cancel
         @canceled = true
       end

@@ -8,12 +8,14 @@ module CallbacksAttachable
       CallbacksAttachable.included klass
     end
 
-    def on(event, opts = {}, &callback)
-      __callbacks__.register(event, opts, callback)
+    def on(event, *more_events_and_opts, &callback)
+      __callbacks__.register(event, *more_events_and_opts, callback)
     end
 
-    def once_on(event, opts = {}, &callback)
-      on(event, opts.merge(until: proc{ true }), &callback)
+    def once_on(event, *more_events_and_opts, &callback)
+      opts = (more_events_and_opts.last.is_a? Hash) ? more_events_and_opts.pop : {}
+      opts[:until] = proc{ true }
+      on event, *more_events_and_opts, opts, &callback
     end
 
     def on?(event)
@@ -47,12 +49,14 @@ module CallbacksAttachable
     klass.extend RegistryOwnable
   end
 
-  def on(*args, &callback)
-    singleton_class.on *args, &callback
+  def on(event, *more_events_and_opts, &callback)
+    singleton_class.on event, *more_events_and_opts, &callback
   end
 
-  def once_on(event, opts = {}, &callback)
-    on(event, opts.merge(until: proc{ true }), &callback)
+  def once_on(event, *more_events_and_opts, &callback)
+    opts = (more_events_and_opts.last.is_a? Hash) ? more_events_and_opts.pop : {}
+    opts[:until] = proc{ true }
+    on event, *more_events_and_opts, opts, &callback
   end
 
   def on?(event)
