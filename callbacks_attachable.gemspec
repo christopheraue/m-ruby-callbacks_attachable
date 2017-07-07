@@ -1,4 +1,3 @@
-# coding: utf-8
 require_relative 'mrblib/version'
 
 Gem::Specification.new do |spec|
@@ -18,6 +17,4 @@ to an individual instance to be triggered only for this instance.
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
-
-  spec.add_development_dependency "bundler", "~> 1.8"
 end
