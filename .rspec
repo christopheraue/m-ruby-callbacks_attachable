@@ -1,2 +1,4 @@
 --format documentation
 --color
+--default-path spec/CRuby
+--require spec_helper.rb

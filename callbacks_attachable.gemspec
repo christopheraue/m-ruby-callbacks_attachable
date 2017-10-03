@@ -1,4 +1,4 @@
-require_relative 'mrblib/version'
+require_relative 'lib/all/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "callbacks_attachable"
@@ -16,5 +16,5 @@ to an individual instance to be triggered only for this instance.
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
-  spec.require_paths = ["lib"]
+  spec.require_paths = ["lib/CRuby"]
 end
