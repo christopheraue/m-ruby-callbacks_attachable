@@ -21,4 +21,11 @@ DESC
   spec.rbfiles =
     Dir["#{spec.dir}/lib/all/**/*.rb"].sort +
     Dir["#{spec.dir}/lib/mruby/**/*.rb"].sort
+
+  unless system("git merge-base --is-ancestor 5a9eedf5417266b82e3695ae0c29797182a5d04e HEAD")
+    # mruby commit 5a9eedf fixed the usage of spec.rbfiles. mruby 1.3.0
+    # did not have that commit, yet. Add the patch for this case:
+    @generate_functions = true
+    @objs << objfile("#{build_dir}/gem_init")
+  end
 end
