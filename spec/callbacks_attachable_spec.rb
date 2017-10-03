@@ -1,15 +1,15 @@
 require 'spec_helper'
 
+shared_examples "triggering event" do |event, scope|
+  context "when triggering event #{event.inspect}" do
+    subject { instance.trigger(event, :arg) }
+    before { expect(callback).to receive(:call).with(__send__(scope), [:arg]) }
+    it { expect{ subject }.not_to raise_error }
+  end
+end
+
 shared_examples_for "triggering events registered for an instance" do |target|
   scope = target == :class ? :instance : :itself
-
-  shared_examples "triggering event" do |event|
-    context "when triggering event #{event.inspect}" do
-      subject { instance.trigger(event, :arg) }
-      before { expect(callback).to receive(:call).with(__send__(scope), [:arg]) }
-      it { expect{ subject }.not_to raise_error }
-    end
-  end
 
   let(:callback) { proc{} }
 
@@ -19,7 +19,7 @@ shared_examples_for "triggering events registered for an instance" do |target|
       instance.__send__(target).on(:event){ |*args| callback.call(self, args) }
     end
 
-    include_examples "triggering event", :event
+    include_examples "triggering event", :event, scope
   end
 
   context "when a callback is attached for multiple events" do
@@ -28,8 +28,8 @@ shared_examples_for "triggering events registered for an instance" do |target|
       instance.__send__(target).on(:event1, :event2){ |*args| callback.call(self, args) }
     end
 
-    include_examples "triggering event", :event1
-    include_examples "triggering event", :event2
+    include_examples "triggering event", :event1, scope
+    include_examples "triggering event", :event2, scope
   end
 end
 
