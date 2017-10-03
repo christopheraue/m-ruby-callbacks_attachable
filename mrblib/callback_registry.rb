@@ -13,7 +13,7 @@ module CallbacksAttachable
       callback = Callback.new(self, events, opts, !@singleton_owner, callback)
       events.each do |event|
         @callbacks[event] ||= {}
-        @callbacks[event][callback] = true
+        @callbacks[event][callback.__id__] = callback
       end
       callback
     end
@@ -23,11 +23,11 @@ module CallbacksAttachable
     end
 
     def trigger(instance, event, args)
-      @callbacks[event] and @callbacks[event].keys.each{ |callback| callback.call(instance, args) }
+      @callbacks[event] and @callbacks[event].each_value{ |callback| callback.call(instance, args) }
     end
 
     def deregister(event, callback)
-      @callbacks[event].delete(callback)
+      @callbacks[event].delete callback.__id__
       @callbacks.delete(event) if @callbacks[event].empty?
     end
   end
