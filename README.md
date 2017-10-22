@@ -73,23 +73,6 @@ AClass.trigger(:singular) # => puts 'callback called!' and immediately
 AClass.trigger(:singular) # => does nothing
 ```
 
-To filter the instances to call the callback for, use the `:if` option:
-
-```ruby
-instance0 = AClass.new(value: 0)
-instance1 = AClass.new(value: 1)
-instance2 = AClass.new(value: 2)
-AClass.on(:even, if: proc{ |inst| inst.value.even? }) do |instance|
-    puts instance.value
-end
-
-AClass.trigger(:even) # => 0
-                      #    2
-```
-
-This is especially useful in combination with `.once_on` to execute the
-callback just for the first instance meeting certain criteria.
-
 ### Callbacks attached to an instance
 
 All above mentioned methods on the class level also exist for each instance of

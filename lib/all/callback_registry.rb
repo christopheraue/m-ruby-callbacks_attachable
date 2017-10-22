@@ -6,10 +6,6 @@ module CallbacksAttachable
     end
 
     def register(*events, opts, callback)
-      unless opts.is_a? Hash
-        events << opts
-        opts = {}
-      end
       callback = Callback.new(self, events, opts, !@singleton_owner, callback)
       events.each do |event|
         @callbacks[event] ||= {}
