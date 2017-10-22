@@ -6,7 +6,7 @@ module CallbacksAttachable
       @once = opts.fetch(:once?, false)
       @instance_scope = instance_scope
       @callback = callback
-      @canceled = false
+      @cancelled = false
     end
 
     def call(instance, args)
@@ -23,17 +23,17 @@ module CallbacksAttachable
     end
 
     def cancel
-      if @canceled
-        raise Error, 'already canceled'
+      if @cancelled
+        raise Error, 'already cancelled'
       else
         @events.each{ |event| @registry.deregister event, self }
         @on_cancel.call if @on_cancel
-        @canceled = true
+        @cancelled = true
       end
     end
 
-    def canceled?
-      @canceled
+    def cancelled?
+      @cancelled
     end
   end
 end
