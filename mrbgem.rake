@@ -12,7 +12,6 @@ DESC
   spec.license      = 'MIT'
   spec.authors      = ['Christopher Aue']
 
-  spec.add_dependency 'mruby-objectspace', :core => 'mruby-objectspace'
   spec.add_dependency 'mruby-object-ext', :core => 'mruby-object-ext'
 
   spec.objs = Dir["#{spec.dir}/ext/mruby/**/*.c"].sort.map do |f|

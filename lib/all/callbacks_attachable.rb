@@ -23,12 +23,6 @@ module CallbacksAttachable
       @__callbacks__ ? (@__callbacks__.registered? event) : false
     end
 
-    def trigger(event, *args)
-      ObjectSpace.each_object(self).each do |inst|
-        trigger_for_instance(inst, event, args)
-      end
-    end
-
     def trigger_for_instance(inst, event, args)
       if superclass.respond_to? :trigger_for_instance
         superclass.trigger_for_instance(inst, event, args)

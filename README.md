@@ -34,15 +34,15 @@ end
 Attach callbacks for an event for all instances of a class with:
 
 ```ruby
-callback = AClass.on(:event) do |method|
+AClass.on(:event) do |method|
   puts __send__(method)
 end
 
 instance0 = AClass.new(value: 0)
 instance1 = AClass.new(value: 1)
 
-AClass.trigger(:event, :value) # => 0
-                               #    1
+instance0.trigger(:event, :value) # => 0
+instance1.trigger(:event, :value) # => 1
 ```
 
 Callbacks attached to a class are evaluated in the context of the instance they
@@ -68,17 +68,17 @@ If you want to execute a callback just a single time attach it with `.once_on`:
 
 ```ruby
 AClass.once_on(:singular) { puts 'callback called!' }
-AClass.trigger(:singular) # => puts 'callback called!' and immediately
+AClass.new.trigger(:singular) # => puts 'callback called!' and immediately
                           #    detaches the callback
-AClass.trigger(:singular) # => does nothing
+AClass.new.trigger(:singular) # => does nothing
 ```
 
 ### Callbacks attached to an instance
 
 All above mentioned methods on the class level also exist for each instance of
-the class. With one exception: Callbacks are executed bound to the context its
-block was defined, just like normal blocks are. `self` inside a callback is the
-same as outside of it.
+the class. They behave the same with the one exception that callbacks are
+executed bound to the context its block was defined, just like normal blocks
+are: `self` inside a callback is the same as outside of it.
 
 Callbacks for an individual instance are executed by calling `#trigger` on it.
 This also executes callbacks attached to the class.
