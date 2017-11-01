@@ -10,12 +10,12 @@ module CallbacksAttachable
     end
 
     def call(instance, args)
+      cancel if @once
       if @instance_scope
         instance.instance_exec(*args, &@callback)
       else
         @callback.call(*args)
       end
-      cancel if @once
     end
 
     def on_cancel(&on_cancel)
